@@ -4,7 +4,15 @@
     name: pxelinux
     update_cache: yes
 
+- name: Creates dirs
+  shell:
+    cmd: |
+      cd /var/lib
+      sudo mkdir tftpboot
+      cd tftpboot
+      sudo mkdir pxelinux
+
 - name: Creates config
   template:
     src: templates/default
-    dest: /var/lib/tftpboot/pxelinux/pxelinux.cfg/default
+    dest: /var/lib/tftpboot/pxelinux/default

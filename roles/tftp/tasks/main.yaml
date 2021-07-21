@@ -4,7 +4,15 @@
     name: tftp-server
     update_cache: yes
 
+- name: Creates dirs
+  shell:
+    cmd: |
+      cd /etc
+      sudo mkdir xinet.d
+      cd /xinet.d
+      sudo mkdir tftp
+
 - name: Creates config
   template:
-    src: templates/inetd.conf
+    src: templates/inetd.conf.j2
     dest: /etc/xinet.d/tftp
