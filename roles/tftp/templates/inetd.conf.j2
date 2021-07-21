@@ -29,7 +29,8 @@
 
 #:BOOT: TFTP service is provided primarily for booting.  Most sites
 #       run this only on machines acting as "boot servers."
-tftp            dgram   udp     wait    nobody  /usr/sbin/tcpd  /usr/sbin/in.tftpd /srv/tftp
+
+tftp            dgram   udp     wait    nobody  /usr/sbin/tcpd  /usr/sbin/in.tftpd /tftpboot
 
 #:RPC: RPC based services
 

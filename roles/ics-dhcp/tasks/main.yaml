@@ -1,5 +1,5 @@
 ---
-- name: Install ICS DHCP server
+- name: Install ISC DHCP server
   apt:
     name: isc-dhcp-server
     update_cache: yes

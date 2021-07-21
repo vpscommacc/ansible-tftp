@@ -10,9 +10,12 @@
       cd /var/lib
       sudo mkdir tftpboot
       cd tftpboot
+      sudo chown -R nobody /var/lib/tftpboot
       sudo mkdir pxelinux
+      cd pxelinux
+      sudo mkdir pxelinux.cfg
 
 - name: Creates config
   template:
     src: templates/default
-    dest: /var/lib/tftpboot/pxelinux/default
+    dest: /var/lib/tftpboot/pxelinux/pxelinux.cfg/default
