@@ -1,0 +1,10 @@
+---
+- name: Install ICS DHCP server
+  apt:
+    name: isc-dhcp-server
+    update_cache: yes
+
+- name: Creates config
+  template:
+    src: templates/dhcpd.conf.j2
+    dest: /etc/dhcp/dhcpd.conf

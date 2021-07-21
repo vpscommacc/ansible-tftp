@@ -1,0 +1,7 @@
+---
+- name: Install PXELinux, TFTP-server, ICS DHCP server
+  hosts: 84.201.187.62
+  roles:
+    - ics-dhcp
+    - pxelinux
+    - tftp

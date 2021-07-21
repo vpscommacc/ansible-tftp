@@ -1,0 +1,10 @@
+---
+- name: Install TFTP-server
+  apt:
+    name: tftp-server
+    update_cache: yes
+
+- name: Creates config
+  template:
+    src: templates/inetd.conf
+    dest: /etc/xinet.d/tftp

@@ -1,0 +1,10 @@
+---
+- name: Install PXELinux
+  apt:
+    name: pxelinux
+    update_cache: yes
+
+- name: Creates config
+  template:
+    src: templates/default
+    dest: /var/lib/tftpboot/pxelinux/pxelinux.cfg/default
