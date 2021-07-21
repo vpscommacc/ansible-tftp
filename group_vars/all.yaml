@@ -1,4 +1,4 @@
-ansible_user: "root"
+ansible_user: "sam"
 ansible_password: 922192
 ansible_connection: ssh
 ansible_port: 22
