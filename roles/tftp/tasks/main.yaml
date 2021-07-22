@@ -1,9 +1,28 @@
 ---
-- name: Install TFTP
+- name: Install TFTP-client
+  apt:
+    name: tftp
+    update_cache: yes
+
+- name: Install TFTP-server
+  apt:
+    name: tftpd-hpa
+    update_cache: yes
+
+- name: Directories creates
   shell:
     cmd: |
-      sudo apt install tftpd-hpa -y
-- name: Install TFTP
-  shell:
-    cmd: |
-      sudo apt install tftp
+      cd /etc
+      sudo mkdir xinet.d
+      sudo chown tftp:tftp /srv/tftp
+      sudo systemctl restart tftpd-hpa
+
+- name: Creates config
+  template:
+    src: templates/inetd.conf.j2
+    dest: /etc/xinet.d/tftp
+
+- name: Creates config one more
+  template:
+    src: templates/tftpd_hpa.j2
+    dest: /etc/default/tftpd_hpa

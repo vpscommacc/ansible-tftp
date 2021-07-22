@@ -12,6 +12,9 @@
 # Packages should modify this file by using update-inetd(8)
 #
 # <service_name> <sock_type> <proto> <flags> <user> <server_path> <args>
+
+server_args = -u root -s /srv/tftp
+
 #
 #:INTERNAL: Internal services
 #discard                stream  tcp     nowait  root    internal
@@ -29,8 +32,6 @@
 
 #:BOOT: TFTP service is provided primarily for booting.  Most sites
 #       run this only on machines acting as "boot servers."
-
-tftp            dgram   udp     wait    nobody  /usr/sbin/tcpd  /usr/sbin/in.tftpd /tftpboot
 
 #:RPC: RPC based services
 

@@ -1,27 +1,186 @@
-  option pxelinux.magic code 208 = string;
-  option pxelinux.configfile code 209 = text;
-  option pxelinux.pathprefix code 210 = text;
-  option pxelinux.reboottime code 211 = unsigned integer 32;
+#Key file
+include "/etc/dhcp/ddns.key";
 
-  subnet 10.0.0.0 netmask 255.255.255.0 {
-          option routers 10.0.0.254;
-          range 10.0.0.2 10.0.0.253;
+ddns-update-style interim;
+ddns-updates on;
+deny client-updates;
+update-static-leases off;
 
-          class "pxeclients" {
-                  match if substring (option vendor-class-identifier, 0, 9) = "PXEClient";
-                  next-server 10.0.0.1;
+#deny bootp;
+allow booting;
 
-                  if option arch = 00:06 {
-                          filename "pxelinux/bootia32.efi";
-                  } else if option arch = 00:07 {
-                          filename "pxelinux/bootx64.efi";
-                  } else {
-                          filename "pxelinux/pxelinux.0";
-                  }
-          }
+log-facility local7;
 
-          host example-ia32 {
-                  hardware ethernet XX:YY:ZZ:11:22:33;
-                  fixed-address 10.0.0.2;
-          }
-  }
+#Network addresses plan
+#192.168.1.1 - 9 - servers
+#192.168.1.10 - 50 - know clients
+#192.168.1.51 - 100 - unknown clients
+#192.168.1.160 - 165 - pxe clients
+
+#Classify
+
+class "pxe" {
+ match if substring (option vendor-class-identifier, 0, 9) = "PXEClient";
+}
+class "etherboot" {
+ match if substring (option vendor-class-identifier, 0, 9) = "Etherboot";
+}
+
+subnet 192.168.1.0 netmask 255.255.255.0 {
+ authoritative;
+
+ zone nvem3. {
+  primary 127.0.0.1;
+  key DDNS_UPDATE;
+ }
+ zone 1.168.192.in-addr.arpa. {
+  primary 127.0.0.1;
+  key DDNS_UPDATE;
+ }
+
+#IP ADDRESSES POOLS
+
+ pool {
+  range 192.168.1.10 192.168.1.50;
+  max-lease-time 604800;
+  deny unknown-clients;
+ }
+
+ pool {
+  range 192.168.1.51 192.168.1.100;
+  max-lease-time 3600;
+  allow unknown-clients;
+ }
+ pool {
+  range 192.168.1.160 192.168.1.165;
+  default-lease-time 360;
+  max-lease-time 3600;
+  server-name "192.168.1.1";
+
+  next-server 192.168.1.1;
+
+  filename "pxelinux.0";
+  allow members of "pxe";
+  allow members of "etherboot";
+ }
+
+#DEFAULT SETTINGS
+
+ option routers 192.168.1.1;
+ option domain-name-servers 192.168.1.1;
+ option domain-name "nvem3";
+ option broadcast-address 192.168.1.255;
+ option netbios-name-servers 192.168.1.1;
+ option subnet-mask 255.255.255.0;
+ option interface-mtu 1500;
+ default-lease-time 3600;
+ interface eth1;
+
+# MAC Address bindings
+
+ host GPP {
+  hardware ethernet E0:69:95:55:06:29;
+  fixed-address 192.168.1.12;
+  option host-name "GPP";
+  ddns-hostname "GPP";
+ }
+ host engineer1-gpp {
+  hardware ethernet 00:19:66:FF:92:3E;
+  fixed-address 192.168.1.13;
+  option host-name "engineer1-gpp";
+  ddns-hostname "engineer1-gpp";
+ }
+ host engineer3-gpp {
+  hardware ethernet 00:25:22:3D:EC:D7;
+  fixed-address 192.168.1.37;
+  option host-name "engineer3-gpp";
+  ddns-hostname "engineer3-gpp";
+ }
+ host accident-workstation {
+  hardware ethernet 00:19:66:FF:95:19;
+  fixed-address 192.168.1.41;
+  option host-name "accident-workstation";
+  ddns-hostname "accident-workstation";
+ }
+ host pto-engineer1 {
+  hardware ethernet D8:50:E6:BE:C8:B9;
+  fixed-address 192.168.1.58;
+  option host-name "pto-engineer1";
+  ddns-hostname "pto-engineer1";
+ }
+ host admin-nvem {
+  hardware ethernet ;
+  fixed-address 192.168.1.71;
+  option host-name "admin-nvem";
+  ddns-hostname "admin-nvem";
+ }
+ host secretary {
+  hardware ethernet 00:25:22:3D:EB:B4;
+  fixed-address 192.168.1.119;
+  option host-name "secretary";
+  ddns-hostname "secretary";
+ }
+ host RIGHT {
+  hardware ethernet 00:16:EC:1F:F8:39;
+  fixed-address 192.168.1.126;
+  option host-name "RIGHT";
+  ddns-hostname "RIGHT";
+ }
+ host comdir {
+  hardware ethernet D8:50:E6:BE:C5:4B;
+  fixed-address 192.168.1.128;
+  option host-name "comdir";
+  ddns-hostname "comdir";
+ }
+# host  {
+#  hardware ethernet C8:60:00:BD:18:31;
+#  fixed-address 192.168.1.136;
+#  option host-name "";
+#  ddns-hostname "";
+# }
+ host unknown {
+  hardware ethernet 00:30:6F:83:73:14;
+  fixed-address 192.168.1.152;
+ }
+ host estudio2505h-gpp-mfp {
+  hardware ethernet 00:80:91:77:AB:74;
+  fixed-address 192.168.1.113;
+  option host-name "estudio2505h-gpp-mfp";
+  ddns-hostname "estudio2505h-gpp-mfp";
+ }
+ host XRX0000AA4C1058 {
+  hardware ethernet 9C:93:4E:4C:10:58;
+  fixed-address 192.168.1.166;
+  option host-name "XRX0000AA4C1058";
+  ddns-hostname "XRX0000AA4C1058";
+ }
+ host persdep {
+  hardware ethernet D8:50:E6:BE:C7:F9;
+  fixed-address 192.168.1.182;
+  option host-name "persdep";
+  ddns-hostname "persdep";
+ }
+ host supply-upp-wks {
+  hardware ethernet 00:14:2A:DD:28:DD;
+  fixed-address 192.168.1.184;
+  option host-name "supply-upp-wks";
+  ddns-hostname "supply-upp-wks";
+ }
+ host uppchief {
+  hardware ethernet D8:50:E6:BE:C7:12;
+  fixed-address 192.168.1.196;
+  option host-name "uppchief";
+  ddns-hostname "uppchief";
+ }
+ host Engineer2-GPP {
+  hardware ethernet 94:DE:80:C7:FA:E5;
+  fixed-address 192.168.1.224;
+  option host-name "Engineer2-GPP";
+  ddns-hostname "Engineer2-GPP";
+ }
+ host pto-engineer2 {
+  hardware ethernet D8:50:E6:BE:C7:48;
+  fixed-address 192.168.1.250;
+  option host-name "pto-engineer2";
+  ddns-hostname "pto-engineer2";
+ }

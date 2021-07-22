@@ -4,7 +4,12 @@
     name: isc-dhcp-server
     update_cache: yes
 
-- name: Creates config
+- name: Creates first config
   template:
     src: templates/dhcpd.conf.j2
     dest: /etc/dhcp/dhcpd.conf.j2
+
+- name: Creates second config
+  template:
+    src: templates/isc-dhcp-server.j2
+    dest: /etc/default/isc-dhcp-server

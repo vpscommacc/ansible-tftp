@@ -3,5 +3,3 @@
   hosts: pxe-server
   roles:
     - ics-dhcp
-    - pxelinux
-    - tftp
