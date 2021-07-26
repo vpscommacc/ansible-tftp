@@ -4,6 +4,11 @@
     name: isc-dhcp-server
     update_cache: yes
 
+- name: Install DHCPDump
+  apt:
+    name: dhcpdump
+    update_cache: yes
+
 - name: Creates first config
   template:
     src: templates/dhcpd.conf.j2
