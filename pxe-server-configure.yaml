@@ -2,4 +2,6 @@
 - name: Install PXELinux, TFTP-server, ICS DHCP server
   hosts: pxe-server
   roles:
+    - tftp
     - ics-dhcp
+    - pxelinux

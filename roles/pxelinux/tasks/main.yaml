@@ -7,10 +7,7 @@
 - name: Creates dirs
   shell:
     cmd: |
-      cd /var/lib
-      sudo mkdir tftpboot
-      cd tftpboot
-      sudo chown -R nobody /var/lib/tftpboot
+      cd /srv/tftp
       sudo mkdir pxelinux
       cd pxelinux
       sudo mkdir pxelinux.cfg
@@ -18,4 +15,4 @@
 - name: Creates config
   template:
     src: templates/default
-    dest: /var/lib/tftpboot/pxelinux/pxelinux.cfg/default
+    dest: /srv/tftp/pxelinux/default

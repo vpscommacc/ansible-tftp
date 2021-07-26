@@ -7,7 +7,7 @@
 - name: Creates first config
   template:
     src: templates/dhcpd.conf.j2
-    dest: /etc/dhcp/dhcpd.conf.j2
+    dest: /etc/dhcp/dhcpd.conf
 
 - name: Creates second config
   template:
