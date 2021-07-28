@@ -1,18 +1,10 @@
 ---
-- name: Install PXELinux
+- name: Install dnsmasq
   apt:
-    name: pxelinux
-    update_cache: yes
+    name: dnsmasq
+    updated_cache: yes
 
-- name: Creates dirs
-  shell:
-    cmd: |
-      cd /srv/tftp
-      sudo mkdir pxelinux
-      cd pxelinux
-      sudo mkdir pxelinux.cfg
-
-- name: Creates config
+- name: Creation of temple
   template:
-    src: templates/default
-    dest: /srv/tftp/pxelinux/default
+    src: 
+    dest:

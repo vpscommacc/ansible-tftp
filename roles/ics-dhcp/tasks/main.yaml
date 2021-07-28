@@ -18,3 +18,7 @@
   template:
     src: templates/isc-dhcp-server.j2
     dest: /etc/default/isc-dhcp-server
+
+- name: Starting server
+  shell:
+    cmd: sudo systemctl start isc-dhcp-server
