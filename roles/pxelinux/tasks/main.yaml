@@ -12,15 +12,27 @@
 - name: Shell commands
   shell:
     cmd: |
-      sudo systemctl restart dnsmasq.service
+      systemctl restart dnsmasq.service
       wget https://releases.ubuntu.com/20.04/ubuntu-20.04.20-desktop-amd64.iso
-      sudo mount -o loop ubuntu-20.04.2.0-desktop-amd64.iso /mnt/
-      sudo cp -rf /mnt/install/netboot/* /srv/tftp/
-      sudo apt install apache2
-      sudo systemctl start apache2
-      sudo systemctl enable apache2
-      sudo cp -rf /mnt/* /var/www/html/
-      sudo ufw allow http
+      mount -o loop ubuntu-20.04.2.0-desktop-amd64.iso /mnt/
+      cp -rf /mnt/install/netboot/* /srv/tftp/
+
+- name: Apache installation
+  apt:
+    name: apache2
+    updated_cache: yes
+
+- name: One more shell commands
+  shell:
+    cmd: |
+      systemctl start apache2
+      systemctl enable apache2
+      cp -rf /mnt/* /var/www/html/
+      ufw allow http
+
+- name: Creates directories for config
+  shell:
+    cmd: |
       cd /var/www/html
       mkdir ubuntu
       cd ubuntu
@@ -35,11 +47,11 @@
   shell:
     - cmd: |
         cd /srv/tftp
-        sudo mkdir ubuntu-installer
+        mkdir ubuntu-installer
         cd ubuntu-installer
-        sudo mkdir amd64
+        mkdir amd64
         cd amd64
-        sudo mkdir boot-screens
+        mkdir boot-screens
         cd boot-screens
 
 - name: Creation of the second PXE config file
