@@ -2,25 +2,25 @@
 - name: Install dnsmasq
   apt:
     name: dnsmasq
-    updated_cache: yes
+    update_cache: yes
 
 - name: Creation of temple for dnsmasq
   template:
-    src: templates/dnsmasq.conf
+    src: templates/dnsmasq.conf.j2
     dest: /etc/dnsmasq.conf
 
 - name: Shell commands
   shell:
     cmd: |
       systemctl restart dnsmasq.service
-      wget https://releases.ubuntu.com/20.04/ubuntu-20.04.20-desktop-amd64.iso
-      mount -o loop ubuntu-20.04.2.0-desktop-amd64.iso /mnt/
+      wget https://releases.ubuntu.com/20.04/ubuntu-20.04.2-live-server-amd64.iso
+      mount -v ubuntu-20.04.2.0-desktop-amd64.iso /mnt/
       cp -rf /mnt/install/netboot/* /srv/tftp/
 
 - name: Apache installation
   apt:
     name: apache2
-    updated_cache: yes
+    update_cache: yes
 
 - name: One more shell commands
   shell:
@@ -43,9 +43,9 @@
     src: templates/local-sources.seed
     dest: /var/www/html/ubuntu/preseed/local-sources.seed
 
-- name: Shell commands two
+- name: Another shell commands
   shell:
-    - cmd: |
+    cmd: |
         cd /srv/tftp
         mkdir ubuntu-installer
         cd ubuntu-installer
@@ -56,12 +56,12 @@
 
 - name: Creation of the second PXE config file
   template:
-    src: templates/txt.cfg
+    src: templates/txt.j2
     dest: /srv/tftp/ubuntu-installer/amd64/boot-screens/txt.cfg
 
 - name: Shell commands three
   shell:
-    - cmd: |
+    cmd: |
         cd /srv/tftp
         sudo mkdir ubuntu-installer
         cd ubuntu-installer
@@ -70,17 +70,17 @@
 
 - name: Creation of the third PXE config file
   template:
-    src: templates/txt.cfg
+    src: templates/rqtxt.j2
     dest: /srv/tftp/ubuntu-installer/amd64/boot-screens/rqtxt.cfg
 
 - name: Creation of the fourthPXE config file
   template:
-    src: templates/txt.cfg
+    src: templates/txt.j2
     dest: /srv/tftp/ubuntu-installer/amd64/boot-screens/menu.cfg
 
 - name: Shell commands fourth
   shell:
-    - cmd: |
+    cmd: |
         ufw allow 53/tcp
         ufw allow 53/udp
         ufw allow 67/udp

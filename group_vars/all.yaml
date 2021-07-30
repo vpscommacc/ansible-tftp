@@ -1,5 +1,6 @@
-ansible_user: "sam"
-ansible_password: 922192
+ansible_ssh_user: "sam"
+ansible_ssh_pass: 922192
+ansible_pass: 922192
 ansible_connection: ssh
 ansible_port: 22
 ansible_become: true
