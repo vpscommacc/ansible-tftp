@@ -4,18 +4,30 @@
     name: dnsmasq
     update_cache: yes
 
-- name: Creation of temple for dnsmasq
-  template:
-    src: templates/dnsmasq.conf.j2
+- name: Copy conf for dnsmasq
+  copy:
+    src: files/dnsmasq.conf
     dest: /etc/dnsmasq.conf
+
+- name: Restart dnsmasq
+  service:
+    name: dnsmasq
+    state: restarted
+
+- name: Download
+  get_url:
+    url: https://releases.ubuntu.com/20.04/ubuntu-20.04.2-live-server-amd64.iso
+    dest: /tmp/ubuntu-20.04.2-live-server-amd64.iso
 
 - name: Shell commands
   shell:
-    cmd: |
-      systemctl restart dnsmasq.service
-      wget https://releases.ubuntu.com/20.04/ubuntu-20.04.2-live-server-amd64.iso
-      mount -v ubuntu-20.04.2.0-desktop-amd64.iso /mnt/
-      cp -rf /mnt/install/netboot/* /srv/tftp/
+    cmd: mount -v ubuntu-20.04.2.0-desktop-amd64.iso /mnt/
+
+- name: Copy mnt
+  copy:
+    src: /mnt/install/netboot/*
+    dst: /srv/tftp/
+  remote_src: yes
 
 - name: Apache installation
   apt:
@@ -27,62 +39,57 @@
     cmd: |
       systemctl start apache2
       systemctl enable apache2
-      cp -rf /mnt/* /var/www/html/
-      ufw allow http
 
-- name: Creates directories for config
-  shell:
-    cmd: |
-      cd /var/www/html
-      mkdir ubuntu
-      cd ubuntu
-      mkdir preseed
+- name: Copy mnt 2
+  copy:
+    src: /mnt/*
+    dst: /var/www/html/
+  remote_src: yes
+
+- name: Creates directories
+  file:
+    path: /var/www/html/ubuntu
+    state: directory
+
+- name: Creates directories
+  file:
+    path: /var/www/html/ubuntu/preseed
+    state: directory
+
+
 
 - name: Creation of the first PXE config file
-  template:
-    src: templates/local-sources.seed
+  copy:
+    src: files/local-sources.seed
     dest: /var/www/html/ubuntu/preseed/local-sources.seed
 
-- name: Another shell commands
-  shell:
-    cmd: |
-        cd /srv/tftp
-        mkdir ubuntu-installer
-        cd ubuntu-installer
-        mkdir amd64
-        cd amd64
-        mkdir boot-screens
-        cd boot-screens
+- name: Creates directories
+  file:
+    path: /srv/tftp/ubuntu-installer
+    state: directory
+
+- name: Creates directories
+  file:
+    path: /srv/tftp/ubuntu-installer/amd64
+    state: directory
+
+- name: Creates directories
+  file:
+    path: /srv/tftp/ubuntu-installer/amd64/boot-screens
+    state: directory
+
 
 - name: Creation of the second PXE config file
-  template:
-    src: templates/txt.j2
+  copy:
+    src: files/txt
     dest: /srv/tftp/ubuntu-installer/amd64/boot-screens/txt.cfg
 
-- name: Shell commands three
-  shell:
-    cmd: |
-        cd /srv/tftp
-        sudo mkdir ubuntu-installer
-        cd ubuntu-installer
-        cd amd64
-        cd boot-screens
-
 - name: Creation of the third PXE config file
-  template:
-    src: templates/rqtxt.j2
+  copy:
+    src: files/rqtxt
     dest: /srv/tftp/ubuntu-installer/amd64/boot-screens/rqtxt.cfg
 
 - name: Creation of the fourthPXE config file
-  template:
-    src: templates/txt.j2
+  copy:
+    src: files/txt
     dest: /srv/tftp/ubuntu-installer/amd64/boot-screens/menu.cfg
-
-- name: Shell commands fourth
-  shell:
-    cmd: |
-        ufw allow 53/tcp
-        ufw allow 53/udp
-        ufw allow 67/udp
-        ufw allow 69/udp
-        ufw allow 4011/udp

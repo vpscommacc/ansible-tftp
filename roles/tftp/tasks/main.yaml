@@ -9,20 +9,29 @@
     name: tftpd-hpa
     update_cache: yes
 
-- name: Directories creates
-  shell:
-    cmd: |
-      cd /etc
-      sudo mkdir xinet.d
-      sudo chown tftp:tftp /srv/tftp
-      sudo systemctl restart tftpd-hpa
+- name: Creates directories
+  file:
+    path: /etc/xinet.d
+    state: directory
+
+- name: chown directories
+  file:
+    path: /srv/tftp
+    state: directory
+    owner: tftp
+    group: tftp
+
+- name: Reload service tftpd-hpa
+  service:
+    name: tftpd-hpa
+    state: reloaded
 
 - name: Creates config
-  template:
-    src: templates/inetd.conf.j2
+  file:
+    src: templates/inetd.conf
     dest: /etc/xinet.d/tftp
 
 - name: Creates config one more
-  template:
-    src: templates/tftpd_hpa.j2
+  file:
+    src: templates/tftpd_hpa
     dest: /etc/default/tftpd_hpa

@@ -1,11 +1,11 @@
 ansible_ssh_user: "root"
-ansible_ssh_pass: 922192
-ansible_pass: 922192
+ansible_ssh_pass: finaM@126f
+#ansible_pass: 922192
 ansible_connection: ssh
 ansible_port: 22
-ansible_become: true
-remote_user: sam
-become_user: root
+#ansible_become: true
+#remote_user: sam
+#become_user: root
 become: true
-become_method: sudo
+#become_method: sudo
 os: linux
