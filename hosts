@@ -1,2 +1,2 @@
 [pxe-server]
-192.168.0.177 ansible_ssh_user=sam ansible_ssh_pass=922192
+147.182.234.46
