@@ -17,10 +17,9 @@
     group: tftp
 
 
-
 - name: Creates config one more
-  file:
-    src: templates/tftpd_hpa
+  copy:
+    src: files/tftpd_hpa
     dest: /etc/default/tftpd_hpa
 
 - name: Reload service tftpd-hpa
