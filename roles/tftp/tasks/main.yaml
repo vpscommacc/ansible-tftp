@@ -14,6 +14,11 @@
     path: /etc/xinet.d
     state: directory
 
+- name: Creates directories
+  file:
+    path: /etc/xinet.d/tftp
+    state: directory
+
 - name: chown directories
   file:
     path: /srv/tftp
