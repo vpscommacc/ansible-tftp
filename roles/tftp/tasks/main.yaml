@@ -24,7 +24,7 @@
 - name: Reload service tftpd-hpa
   service:
     name: tftpd-hpa
-    state: reloaded
+    state: restarted
 
 - name: Creates config
   file:
