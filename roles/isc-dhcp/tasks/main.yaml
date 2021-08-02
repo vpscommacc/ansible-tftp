@@ -11,12 +11,12 @@
 
 - name: Creates first config
   copy:
-    src: files/dhcpd.conf.j2
+    src: files/dhcpd.conf
     dest: /etc/dhcp/dhcpd.conf
 
 - name: Creates second config
   copy:
-    src: files/isc-dhcp-server.j2
+    src: files/isc-dhcp-server
     dest: /etc/default/isc-dhcp-server
 
 - name: Restart isc-dhcp-server
