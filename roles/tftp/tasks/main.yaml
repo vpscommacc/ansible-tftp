@@ -9,16 +9,6 @@
     name: tftpd-hpa
     update_cache: yes
 
-- name: Creates directories
-  file:
-    path: /etc/xinet.d
-    state: directory
-
-- name: Creates directories
-  file:
-    path: /etc/xinet.d/tftp
-    state: directory
-
 - name: chown directories
   file:
     path: /srv/tftp
@@ -26,17 +16,14 @@
     owner: tftp
     group: tftp
 
-- name: Reload service tftpd-hpa
-  service:
-    name: tftpd-hpa
-    state: restarted
 
-- name: Creates config
-  file:
-    src: templates/inetd.conf
-    dest: /etc/xinet.d/tftp
 
 - name: Creates config one more
   file:
     src: templates/tftpd_hpa
     dest: /etc/default/tftpd_hpa
+
+- name: Reload service tftpd-hpa
+  service:
+    name: tftpd-hpa
+    state: restarted
