@@ -27,7 +27,7 @@
   copy:
     src: /mnt/install/netboot/*
     dst: /srv/tftp/
-  remote_src: yes
+    remote_src: yes
 
 - name: Apache installation
   apt:
@@ -44,7 +44,7 @@
   copy:
     src: /mnt/*
     dst: /var/www/html/
-  remote_src: yes
+    remote_src: yes
 
 - name: Creates directories
   file:
